@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudentServiceImpl implements IStudentService {
-    public static Map<Integer, Student> students;
+public class StudentService implements IStudentService {
+    private static Map<Integer, Student> students;
     static {
         students = new HashMap<>();
         students.put(1, new Student(123, "Tri", 84));
