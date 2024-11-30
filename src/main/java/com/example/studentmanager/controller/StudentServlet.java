@@ -2,6 +2,7 @@ package com.example.studentmanager.controller;
 // Import all model, service and servlet api with exceptions
 import com.example.studentmanager.*;
 import com.example.studentmanager.model.Student;
+import com.example.studentmanager.service.IStudentService;
 import com.example.studentmanager.service.StudentService;
 
 import javax.servlet.*;
@@ -13,10 +14,11 @@ import java.io.IOException;
 import java.util.List;
 @WebServlet(name = "StudentServlet", urlPatterns = "/students")
 public class StudentServlet  extends HttpServlet {
-    // Tao object cua service
-    private final StudentService studentService = new StudentService();
+    // service
+    private final IStudentService studentService = new StudentService();
     // doGet va doPost - protected?
     // 1. doPost va cac tac vu lien quan
+//
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy Parameters (Dữ liệu request gửi đi) có name là "action".
@@ -42,22 +44,30 @@ public class StudentServlet  extends HttpServlet {
     }
 
     private void createStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = (int) (Math.random()*1000);
-        String name = request.getParameter("name");
-        int score = Integer.parseInt(request.getParameter("score"));
-
-        Student student = new Student(id, name, score);
-        this.studentService.save(student);
-        RequestDispatcher view = request.getRequestDispatcher("student/create.jsp");
-        request.setAttribute("message", "New student created sucessfully!");
         try {
-            view.forward(request, response);
+            int id = (int) (Math.random() * 1000);
+            String name = request.getParameter("name");
+            String score = request.getParameter("score");
+
+            if (name == null || name.trim().isEmpty() || score == null || score.isEmpty()) {
+                request.setAttribute("message", "Name or Score cannot be empty!");
+                RequestDispatcher errorDispatcher = request.getRequestDispatcher("error-404.jsp");
+                errorDispatcher.forward(request, response);
+                return;
+            }
+
+            int scoreParam = Integer.parseInt(score);
+            Student student = new Student(id, name, scoreParam);
+            this.studentService.save(student);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("student/create.jsp");
+            request.setAttribute("message", "New student created sucessfully!");
+            dispatcher.forward(request, response);
         }
-        catch (ServletException e) {
+        catch (Exception e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            RequestDispatcher errorDispatcher = request.getRequestDispatcher("error-404.jsp");
+            errorDispatcher.forward(request, response);
         }
     }
 
@@ -105,6 +115,7 @@ public class StudentServlet  extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         List<Student> student = this.studentService.findAll();
         RequestDispatcher dispatcher;
+//        day du lieu sang View
         if(student == null){
             dispatcher = request.getRequestDispatcher("error-404.jsp");
         }

@@ -14,6 +14,8 @@
 </head>
 <body>
 <div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="" width="72" >
+
     <h1 class="display-5 fw-bold"><%= "404 not found" %></h1>
 <%--    <div class="col-lg-6 mx-auto">--%>
 <%--        <p class="lead mb-4">Let's manage your students, the easy way</p>--%>

@@ -31,9 +31,11 @@
     <input class="form-control" type="text" name="name" id="name" placeholder="Enter Name">
     <input class="form-control" type="number" name="score" id="score" placeholder="Enter Score">
     <p>
+
         <c:if test='${requestScope["message"] != null}'>
             <span class="message toast-body">${requestScope["message"]}</span>
         </c:if>
+
     </p>
     <input class="btn btn-outline-primary btn-sm" type="submit" value="Submit">
 </form>
